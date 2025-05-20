@@ -92,15 +92,11 @@ describe('Basic user flow for Website', () => {
     const productItems = await page.$$('product-item');
 
     for (let i = 0; i < productItems.length; i++) {
-      const shadowRoot = await productItems[i].getProperty('shadowRoot');
-      const button = await shadowRoot.$('button');
-      const buttonText = await button.getProperty('innerText');
-      const textValue = await buttonText.jsonValue();
-
-      if (textValue === 'Add to Cart') {
-        await button.click();
-        await page.waitForTimeout(100); // prevent race condition
-      }
+      await page.evaluate((el) => {
+        const btn = el.shadowRoot.querySelector('button');
+        if (btn && btn.innerText === 'Add to Cart') btn.click();
+      }, productItems[i]);
+      await new Promise(r => setTimeout(r, 50)); // prevent race condition
     }
 
     const cartCount = await page.$eval('#cart-count', el => el.innerText);
@@ -122,9 +118,7 @@ describe('Basic user flow for Website', () => {
     const productItems = await page.$$('product-item');
 
     for (let i = 0; i < productItems.length; i++) {
-      const shadowRoot = await productItems[i].getProperty('shadowRoot');
-      const button = await shadowRoot.$('button');
-      const text = await (await button.getProperty('innerText')).jsonValue();
+      const text = await page.evaluate(el => el.shadowRoot.querySelector('button').innerText, productItems[i]);
       expect(text).toBe('Remove from Cart');
     }
 
@@ -139,6 +133,7 @@ describe('Basic user flow for Website', () => {
      * At this point the item 'cart' in localStorage should be 
      * '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]', check to make sure it is
      */
+
     const cart = await page.evaluate(() => localStorage.getItem('cart'));
     console.log('Cart contents:', cart);
     expect(cart).toBe('[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]');
@@ -158,15 +153,11 @@ describe('Basic user flow for Website', () => {
     const productItems = await page.$$('product-item');
 
     for (let i = 0; i < productItems.length; i++) {
-      const shadowRoot = await productItems[i].getProperty('shadowRoot');
-      const button = await shadowRoot.$('button');
-      const buttonText = await button.getProperty('innerText');
-      const textValue = await buttonText.jsonValue();
-
-      if (textValue === 'Remove from Cart') {
-        await button.click();
-        await page.waitForTimeout(100);
-      }
+      await page.evaluate((el) => {
+        const btn = el.shadowRoot.querySelector('button');
+        if (btn && btn.innerText === 'Remove from Cart') btn.click();
+      }, productItems[i]);
+      await new Promise(r => setTimeout(r, 50)); // wait for update
     }
 
     const cartCount = await page.$eval('#cart-count', el => el.innerText);
@@ -189,9 +180,7 @@ describe('Basic user flow for Website', () => {
     const productItems = await page.$$('product-item');
 
     for (let i = 0; i < productItems.length; i++) {
-      const shadowRoot = await productItems[i].getProperty('shadowRoot');
-      const button = await shadowRoot.$('button');
-      const text = await (await button.getProperty('innerText')).jsonValue();
+      const text = await page.evaluate(el => el.shadowRoot.querySelector('button').innerText, productItems[i]);
       expect(text).toBe('Add to Cart');
     }
 
@@ -209,6 +198,7 @@ describe('Basic user flow for Website', () => {
      * At this point the item 'cart' in localStorage should be '[]', check to make sure it is
      */
 
+    await new Promise(r => setTimeout(r, 200)); // ensure localStorage is settled
     const cart = await page.evaluate(() => localStorage.getItem('cart'));
     console.log('Cart contents after removal:', cart);
     expect(cart).toBe('[]');
