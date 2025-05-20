@@ -3,6 +3,7 @@
 ## Members: George Minasyan and Aldrin Ilagan
 
 [Link to test.js](https://github.com/InvertedVoice/Lab7-Starter/blob/main/__tests__/lab7.test.js)
+[Link to screenshot](https://github.com/InvertedVoice/Lab7-Starter/blob/main/tests.png)
 
 1. Where would you fit your automated tests in your Recipe project development pipeline? Select one of the following and explain why.
 > *Within a Github action that runs whenever code is pushed.* <br>
