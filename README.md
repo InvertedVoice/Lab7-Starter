@@ -2,6 +2,8 @@
 
 ## Members: George Minasyan and Aldrin Ilagan
 
+[Link to test.js](https://github.com/InvertedVoice/Lab7-Starter/blob/main/__tests__/lab7.test.js)
+
 1. Where would you fit your automated tests in your Recipe project development pipeline? Select one of the following and explain why.
 > *Within a Github action that runs whenever code is pushed.* <br>
 Automated testing is best used as part of our continous integration (CI), which makes it so that our testing is automated with every push we do to our repository, which leads to quick veritifaction of the application still working correctly, all the while reducing the chance of our code completely breaking apart.
