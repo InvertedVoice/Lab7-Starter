@@ -1,6 +1,6 @@
 # Lab 7
 
-## Members: George Minasyan
+## Members: George Minasyan and Aldrin Ilagan
 
 1. Where would you fit your automated tests in your Recipe project development pipeline? Select one of the following and explain why.
 > *Within a Github action that runs whenever code is pushed.* <br>
